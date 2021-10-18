@@ -1,0 +1,121 @@
+version: '3.4'
+
+services:
+  api_gw:
+    image: ${DOCKER_REGISTRY-}apigw
+    build:
+      context: .
+      dockerfile: ApiGW/API_GW/API_GW/Dockerfile
+    ports:
+        - 3666:80 
+  RabbitMQ_Manager:
+    container_name: RabbitMqManager
+    image: rabbitmq:3-management
+    ports:
+    - 5672:5672
+    - 15672:15672
+
+  RabbitMQ_AcknowledgementSql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment: 
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Barbar11"
+      MSSQL_PID: Express
+    ports: 
+    - "1433:1433"
+    container_name: sqlServer
+
+  planservice:
+    image: ${DOCKER_REGISTRY-}planservice
+    build:
+      context: .
+      dockerfile: PlanService/PlanService/Dockerfile
+
+  mongodb_planservice:
+   container_name: PlanServiceDb
+   image: mongo:latest
+   ports:
+    - 27018:27017
+   volumes:
+    - mongodb_planservice:/data/db
+
+  searchservice:
+    image: ${DOCKER_REGISTRY-}searchservice
+    build:
+      context: .
+      dockerfile: MapServices/SearchService/Dockerfile
+
+  settingsservice:
+    image: ${DOCKER_REGISTRY-}settingsservice
+    build:
+      context: .
+      dockerfile: SettingsService/Dockerfile
+
+  mongodb_settingsservice:
+   container_name: SettingsServiceDB
+   image: mongo:latest
+   ports:
+     - 27017:27017
+   volumes:
+     - mongodb_settingsservice:/data/db
+
+  reactcore:
+    image: ${DOCKER_REGISTRY-}reactcore
+    build:
+      context: .
+      dockerfile: ReactCore/Dockerfile
+    ports:
+    - 3000:80 
+
+  user-service:
+    container_name: UserService
+    image: user-service
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      MSSQL_USER: "SA"
+      MSSQL_PASSWORD: "T8Bn73oL51Au"
+      SPRING_DATASOURCE_URL: "jdbc:sqlserver://user-database;registration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false"
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+      SPRING_DATASOURCE_PASSWORD: "T8Bn73oL51Au"
+      SPRING_DATASOURCE_USERNAME: "SA"
+    depends_on:
+      - sql-server
+  sql-server:
+      image: mcr.microsoft.com/mssql/server:2019-latest
+      container_name: user-database
+      environment:
+        ACCEPT_EULA: "Y"
+        SA_PASSWORD: "T8Bn73oL51Au"
+        MSSQL_PID: "Express"
+      ports:
+        - "1434:1434"
+
+  classlibraryapi:
+    image: ${DOCKER_REGISTRY-}classlibraryapi
+    build:
+      context: .
+      dockerfile: ClassLibraryAPI/ClassLibraryAPI/Dockerfile
+
+  mementoservice:
+    image: ${DOCKER_REGISTRY-}mementoservice
+    build:
+      context: .
+      dockerfile: MementoService/Dockerfile
+
+  mementoservice-mongodb:
+   container_name: mementoservicedb
+   image: mongo:latest
+   ports:
+    - 27019:27017
+   volumes:
+    - mementoservice-mongodb:/data/db
+
+
+volumes:
+ mongodb_settingsservice:
+ mongodb_planservice:
+ mementoservice-mongodb:

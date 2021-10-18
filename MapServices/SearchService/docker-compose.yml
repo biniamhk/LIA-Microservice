@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  searchservice:
+    image: ${DOCKER_REGISTRY-}searchservice
+    build:
+      context: .
+      dockerfile: Dockerfile    
+    container_name: searchapi
+    ports:
+      - 8000:80
+      - 8001:443
+    environment:
+      - "ASPNETCORE_URLS=https://+;http://+"
+    restart: on-failure
+
+  apigw:
+    container_name: apigw
+    image: apigw:latest 
+    ports:
+      - "80"

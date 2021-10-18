@@ -1,0 +1,90 @@
+Index: docker-compose.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>version: '3.4'\r\n\r\nservices:\r\n  api_gw:\r\n    image: ${DOCKER_REGISTRY-}apigw\r\n    build:\r\n      context: .\r\n      dockerfile: ApiGW/API_GW/API_GW/Dockerfile\r\n    ports:\r\n        - 3666:80 \r\n  RabbitMQ_Manager:\r\n    container_name: RabbitMqManager\r\n    image: rabbitmq:3-management\r\n    ports:\r\n    - 5672:5672\r\n    - 15672:15672\r\n\r\n  RabbitMQ_AcknowledgementSql:\r\n    image: mcr.microsoft.com/mssql/server:2019-latest\r\n    environment: \r\n      ACCEPT_EULA: \"Y\"\r\n      SA_PASSWORD: \"Barbar11\"\r\n      MSSQL_PID: Express\r\n    ports: \r\n    - \"1433:1433\"\r\n    container_name: sqlServer\r\n\r\n  planservice:\r\n    image: ${DOCKER_REGISTRY-}planservice\r\n    build:\r\n      context: .\r\n      dockerfile: PlanService/PlanService/Dockerfile\r\n\r\n  mongodb_planservice:\r\n   container_name: PlanServiceDb\r\n   image: mongo:latest\r\n   ports:\r\n    - 27018:27017\r\n   volumes:\r\n    - mongodb_planservice:/data/db\r\n\r\n  searchservice:\r\n    image: ${DOCKER_REGISTRY-}searchservice\r\n    build:\r\n      context: .\r\n      dockerfile: MapServices/SearchService/Dockerfile\r\n\r\n  settingsservice:\r\n    image: ${DOCKER_REGISTRY-}settingsservice\r\n    build:\r\n      context: .\r\n      dockerfile: SettingsService/Dockerfile\r\n\r\n  mongodb_settingsservice:\r\n   container_name: SettingsServiceDB\r\n   image: mongo:latest\r\n   ports:\r\n     - 27017:27017\r\n   volumes:\r\n     - mongodb_settingsservice:/data/db\r\n\r\n  reactcore:\r\n    image: ${DOCKER_REGISTRY-}reactcore\r\n    build:\r\n      context: .\r\n      dockerfile: ReactCore/Dockerfile\r\n\r\n  user-service:\r\n    container_name: UserService\r\n    image: user-service\r\n    build:\r\n      context: .\r\n      dockerfile: user-service/Dockerfile\r\n    ports:\r\n      - \"8080:8080\"\r\n    environment:\r\n      MSSQL_USER: \"SA\"\r\n      MSSQL_PASSWORD: \"T8Bn73oL51Au\"\r\n      SPRING_DATASOURCE_URL: \"jdbc:sqlserver://user-database;registration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false\"\r\n      SPRING_DATASOURCE_DRIVER_CLASS_NAME: \"com.microsoft.sqlserver.jdbc.SQLServerDriver\"\r\n      SPRING_DATASOURCE_PASSWORD: \"T8Bn73oL51Au\"\r\n      SPRING_DATASOURCE_USERNAME: \"SA\"\r\n    depends_on:\r\n      - sql-server\r\n  sql-server:\r\n      image: mcr.microsoft.com/mssql/server:2019-latest\r\n      container_name: user-database\r\n      environment:\r\n        ACCEPT_EULA: \"Y\"\r\n        SA_PASSWORD: \"T8Bn73oL51Au\"\r\n        MSSQL_PID: \"Express\"\r\n      ports:\r\n        - \"1434:1434\"\r\n\r\n  classlibraryapi:\r\n    image: ${DOCKER_REGISTRY-}classlibraryapi\r\n    build:\r\n      context: .\r\n      dockerfile: ClassLibraryAPI/ClassLibraryAPI/Dockerfile\r\n\r\n\r\n#  mementoservice:\r\n#    image: ${DOCKER_REGISTRY-}mementoservice\r\n#    build:\r\n#      context: .\r\n#      dockerfile: MementoService/Dockerfile\r\n#\r\n#  mementoservice-mongodb:\r\n#   container_name: mementoservicedb\r\n#   image: mongo:latest\r\n#   ports:\r\n#    - 27019:27017\r\n#   volumes:\r\n#    - mementoservice-mongodb:/data/db\r\n\r\n\r\n\r\n\r\nvolumes:\r\n mongodb_settingsservice:\r\n mongodb_planservice:\r\n mementoservice-mongodb:\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/docker-compose.yml b/docker-compose.yml
+--- a/docker-compose.yml	(revision b7789bac1b9e1a877f8458755f0e52a58e3c980a)
++++ b/docker-compose.yml	(date 1634120596701)
+@@ -99,19 +99,19 @@
+       dockerfile: ClassLibraryAPI/ClassLibraryAPI/Dockerfile
+ 
+ 
+-#  mementoservice:
+-#    image: ${DOCKER_REGISTRY-}mementoservice
+-#    build:
+-#      context: .
+-#      dockerfile: MementoService/Dockerfile
+-#
+-#  mementoservice-mongodb:
+-#   container_name: mementoservicedb
+-#   image: mongo:latest
+-#   ports:
+-#    - 27019:27017
+-#   volumes:
+-#    - mementoservice-mongodb:/data/db
++  mementoservice:
++    image: ${DOCKER_REGISTRY-}mementoservice
++    build:
++      context: .
++      dockerfile: MementoService/Dockerfile
++
++  mementoservice-mongodb:
++    container_name: mementoservicedb
++    image: mongo:latest
++    ports:
++     - "27019:27017"
++    volumes:
++     - mementoservice-mongodb:/data/db
+ 
+ 
+ 
+Index: user-service/src/main/resources/application.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>server:\r\n  port:\r\n  error:\r\n    include-message: always\r\n    include-binding-errors: always\r\n\r\nspring:\r\n  datasource:\r\n    password: T8Bn73oL51Au\r\n    url: jdbc:sqlserver://user-database;registration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false\r\n    username: SA\r\n    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver\r\n  jpa:\r\n    hibernate:\r\n      ddl-auto: update\r\n    properties:\r\n      hibernate:\r\n        dialect: org.hibernate.dialect.SQLServerDialect\r\n        format_sql: true\r\n    show-sql: true\r\n\r\n#  mail:\r\n#    host: localhost\r\n#    port: 1025\r\n#    username: hello\r\n#    password: hello\r\n#\r\n#    properties:\r\n#      mail:\r\n#        smtp:\r\n#          ssl:\r\n#            trust: \"*\"\r\n#          auth: true\r\n#          starttls:\r\n#            enable: true\r\n#          connectiontimeout: 5000\r\n#          timeout: 3000\r\n#          writetimeout: 5000
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/src/main/resources/application.yml b/user-service/src/main/resources/application.yml
+--- a/user-service/src/main/resources/application.yml	(revision b7789bac1b9e1a877f8458755f0e52a58e3c980a)
++++ b/user-service/src/main/resources/application.yml	(date 1634041078060)
+@@ -6,13 +6,13 @@
+ 
+ spring:
+   datasource:
+-    password: T8Bn73oL51Au
+-    url: jdbc:sqlserver://user-database;registration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false
+-    username: SA
++    password: Biniam2011
++    url: jdbc:sqlserver://localhost:1433;registration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false
++    username: biniam
+     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+   jpa:
+     hibernate:
+-      ddl-auto: update
++      ddl-auto: create-drop
+     properties:
+       hibernate:
+         dialect: org.hibernate.dialect.SQLServerDialect
+Index: user-service/docker-compose.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>version: '3.7'\r\nservices:\r\n  user-service:\r\n    build:\r\n      context: ./\r\n      dockerfile: Dockerfile\r\n    image: user-service\r\n    ports:\r\n      - \"8080:8080\"\r\n    environment:\r\n      MSSQL_USER: \"SA\"\r\n      MSSQL_PASSWORD: \"T8Bn73oL51Au\"\r\n      SPRING_DATASOURCE_URL: \"jdbc:sqlserver://user-database;database=registration\"\r\n      SPRING_DATASOURCE_DRIVER_CLASS_NAME: \"com.microsoft.sqlserver.jdbc.SQLServerDriver\"\r\n      SPRING_DATASOURCE_PASSWORD: \"T8Bn73oL51Au\"\r\n      SPRING_DATASOURCE_USERNAME: \"SA\"\r\n    depends_on:\r\n      - sql-server\r\n  sql-server:\r\n    image: mcr.microsoft.com/mssql/server:2019-latest\r\n    container_name: user-database\r\n    environment:\r\n      ACCEPT_EULA: \"Y\"\r\n      SA_PASSWORD: \"T8Bn73oL51Au\"\r\n      MSSQL_PID: \"Express\"\r\n    ports:\r\n      - \"1433:1433\"\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/docker-compose.yml b/user-service/docker-compose.yml
+--- a/user-service/docker-compose.yml	(revision b7789bac1b9e1a877f8458755f0e52a58e3c980a)
++++ b/user-service/docker-compose.yml	(date 1634043048919)
+@@ -10,7 +10,7 @@
+     environment:
+       MSSQL_USER: "SA"
+       MSSQL_PASSWORD: "T8Bn73oL51Au"
+-      SPRING_DATASOURCE_URL: "jdbc:sqlserver://user-database;database=registration"
++      SPRING_DATASOURCE_URL: "jdbc:sqlserver://user-database;registration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false"
+       SPRING_DATASOURCE_DRIVER_CLASS_NAME: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+       SPRING_DATASOURCE_PASSWORD: "T8Bn73oL51Au"
+       SPRING_DATASOURCE_USERNAME: "SA"

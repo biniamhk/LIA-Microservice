@@ -1,0 +1,83 @@
+
+
+  
+  * {
+  margin: 0;
+  padding: 0;
+  --bg_gradient:linear-gradient(90deg, #09203f 0%, #537895 100%);
+  }
+
+.footer-style {
+  width:100%;
+  min-height:15vmin;
+  display:block;
+  padding: 0px;
+  height: 127px;
+  position: fixed;
+  background: var(--bg_gradient);
+}
+
+
+.App-header {
+  min-height: 100px;
+  display: flex;
+  align-items: space-around;
+  justify-content: flex-end;
+  flex-flow: row wrap;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  background: var(--bg_gradient);
+	padding: 0px;
+	height: 127px;
+  min-height:15vmin;
+}
+
+.main-style {
+  margin:0;
+  padding:0;
+  min-height:70vmin;
+}
+
+
+/*.navbar-nav li {
+	display: inline-block;
+	list-style-type: none;
+	width: 80px;
+	padding: 40px;
+	margin: 0px;
+	color:white;
+}
+*/
+
+
+nav {
+  display:flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items:center;
+  width:80%;
+}
+
+nav a {
+  padding:0;
+  margin:0;
+  font-size:1em;
+	color:white;
+  text-decoration:none;
+  min-width:150px;
+  transition: all 0.5s;
+}
+nav a:hover {
+	font-weight:bold;
+  text-decoration:underline;
+  font-size:1.1em;
+}
+
+
+
+/*below is default React css classes/settings*/
+
+.App {
+  text-align: center;
+}
+

@@ -1,0 +1,59 @@
+Index: user-service/src/main/java/se/frontendstrategy/userservice/registration/RegistrationController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package se.frontendstrategy.userservice.registration;\r\n\r\nimport lombok.AllArgsConstructor;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.web.bind.annotation.*;\r\nimport se.frontendstrategy.userservice.security.PasswordEncoder;\r\nimport se.frontendstrategy.userservice.users.User;\r\nimport java.util.List;\r\n\r\n@RestController\r\n@RequestMapping(path=\"api/v1/\")\r\n@AllArgsConstructor\r\npublic class RegistrationController {\r\n\r\n    private RegistrationService registrationService;\r\n    private PasswordEncoder passwordEncoder;\r\n\r\n    @PostMapping(\"/registration\")\r\n    public String registerUser(@RequestBody RegistrationRequest request) {\r\n        return registrationService.registerUser(request);\r\n    }\r\n\r\n    @PostMapping(\"/registrationAdmin\")\r\n    public String registerAdmin(@RequestBody RegistrationRequest request) {\r\n        return registrationService.registerAdmin(request);\r\n    }\r\n\r\n    @GetMapping(path = \"confirm\")\r\n    public String confirmUser(@RequestParam(\"token\") String token) {\r\n        return registrationService.confirmToken(token);\r\n    }\r\n\r\n    @PostMapping(path = \"/login\")\r\n    public Object logInUser(@RequestBody RegistrationRequest request){\r\n        List<User> users = registrationService.getUserByEmail(request.getEmail());\r\n        for (User user:users) {\r\n            if(user.getEmail().equals(request.getEmail()) &&\r\n                    passwordEncoder.bCryptPasswordEncoder().matches(request.getPassword(),user.getPassword())){\r\n                return users;\r\n            }\r\n        }\r\n        return \"Invalid login\";\r\n    }\r\n\r\n    @GetMapping(\"/users\")\r\n    public List<User> getAllUser(){\r\n        return registrationService.getUsers();\r\n\r\n    }\r\n\r\n    @PutMapping(path = \"/update\")\r\n    public String updatePassword(){\r\n        return null;\r\n    }\r\n\r\n   @DeleteMapping(path = \"/delete/{email}\")\r\n    @ResponseStatus(HttpStatus.GONE)\r\n   public void deleteUser(@PathVariable String email){\r\n       registrationService.deleteByEmail(email);\r\n\r\n   }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/src/main/java/se/frontendstrategy/userservice/registration/RegistrationController.java b/user-service/src/main/java/se/frontendstrategy/userservice/registration/RegistrationController.java
+--- a/user-service/src/main/java/se/frontendstrategy/userservice/registration/RegistrationController.java	(revision 287a043599f37490fb10f9f8495acbe6323d7d8d)
++++ b/user-service/src/main/java/se/frontendstrategy/userservice/registration/RegistrationController.java	(date 1634024149727)
+@@ -3,9 +3,11 @@
+ import lombok.AllArgsConstructor;
+ import org.springframework.http.HttpStatus;
+ import org.springframework.web.bind.annotation.*;
++import org.springframework.web.server.ResponseStatusException;
+ import se.frontendstrategy.userservice.security.PasswordEncoder;
+ import se.frontendstrategy.userservice.users.User;
+ import java.util.List;
++import java.util.Optional;
+ 
+ @RestController
+ @RequestMapping(path="api/v1/")
+@@ -39,7 +41,7 @@
+                 return users;
+             }
+         }
+-        return "Invalid login";
++        return new ResponseStatusException(HttpStatus.NOT_FOUND);
+     }
+ 
+     @GetMapping("/users")
+Index: user-service/src/main/resources/application.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>server:\r\n  port:\r\n  error:\r\n    include-message: always\r\n    include-binding-errors: always\r\n\r\nspring:\r\n  datasource:\r\n    password: T8Bn73oL51Au\r\n    url: jdbc:sqlserver://user-database;registration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false\r\n    username: SA\r\n    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver\r\n  jpa:\r\n    hibernate:\r\n      ddl-auto: update\r\n    properties:\r\n      hibernate:\r\n        dialect: org.hibernate.dialect.SQLServerDialect\r\n        format_sql: true\r\n    show-sql: true\r\n\r\n#  mail:\r\n#    host: localhost\r\n#    port: 1025\r\n#    username: hello\r\n#    password: hello\r\n#\r\n#    properties:\r\n#      mail:\r\n#        smtp:\r\n#          ssl:\r\n#            trust: \"*\"\r\n#          auth: true\r\n#          starttls:\r\n#            enable: true\r\n#          connectiontimeout: 5000\r\n#          timeout: 3000\r\n#          writetimeout: 5000
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/src/main/resources/application.yml b/user-service/src/main/resources/application.yml
+--- a/user-service/src/main/resources/application.yml	(revision 287a043599f37490fb10f9f8495acbe6323d7d8d)
++++ b/user-service/src/main/resources/application.yml	(date 1634024332500)
+@@ -6,13 +6,13 @@
+ 
+ spring:
+   datasource:
+-    password: T8Bn73oL51Au
+-    url: jdbc:sqlserver://user-database;registration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false
+-    username: SA
++    password: Biniam2011
++    url: jdbc:sqlserver://localhost:1433;registration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false
++    username: biniam
+     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+   jpa:
+     hibernate:
+-      ddl-auto: update
++      ddl-auto: create-drop
+     properties:
+       hibernate:
+         dialect: org.hibernate.dialect.SQLServerDialect

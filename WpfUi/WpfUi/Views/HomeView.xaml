@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="WpfUi.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfUi.Views" xmlns:viewmodels="clr-namespace:WpfUi.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:HomeViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="#E1E4E6">
+       
+
+
+        <Grid>
+           
+            
+            
+            
+
+            <StackPanel>
+                <TextBlock Text="Home"
+                       FontSize="25">
+
+                </TextBlock>
+
+                <TextBlock>
+                    CurrentUser
+                </TextBlock>
+
+                <TextBlock>
+                  Token
+
+                </TextBlock>
+
+
+
+                <TextBlock>
+                  Email
+
+                </TextBlock>
+                
+                <TextBlock
+                    Text="{Binding WhoisUser.Email}">
+
+                </TextBlock>
+
+                <TextBlock>
+                   UserId
+
+                </TextBlock>
+
+                <TextBlock
+                    Text="{Binding WhoisUser.Id}">
+
+                </TextBlock>
+
+                <TextBlock>
+                   UserName
+
+                </TextBlock>
+                <TextBlock
+                    Text="{Binding WhoisUser.UserName}">
+
+                </TextBlock>
+
+                <TextBlock>
+                   UserRole:
+                    
+                </TextBlock>
+
+                <TextBlock
+                    Text="{Binding WhoisUser.UserRole}">
+
+                </TextBlock>
+
+                <TextBlock>
+                   Adress:
+
+                </TextBlock>
+
+                <TextBlock
+                    Text="{Binding WhoisUser.Adress}">
+
+                </TextBlock>
+
+                <TextBlock>
+                   FirstName: 
+
+                </TextBlock>
+
+                <TextBlock
+                    Text="{Binding WhoisUser.FirstName}">
+
+                </TextBlock>
+
+                <TextBlock>
+                   LastName: 
+
+                </TextBlock>
+
+                <TextBlock
+                    Text="{Binding WhoisUser.LastName}">
+
+                </TextBlock>
+
+              
+
+            </StackPanel>
+            
+        </Grid>
+
+
+
+    </Grid>
+</UserControl>

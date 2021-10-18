@@ -1,0 +1,82 @@
+
+
+.buttonholder, .usertable {
+	display:flex;
+	width:70%;
+	margin-left:auto;
+	margin-right:5%;
+	flex-flow:row nowrap;
+	justify-content:flex-end;
+	margin-top:3em;
+	box-sizing:border-box;
+}
+
+.buttonholder > button {
+	margin:0;
+}
+
+.usertable {
+	--headcol:#DDD;
+	--oddcol:#9E9FCA;
+	flex-flow:column nowrap;
+	border:2px solid black;
+	margin-top:0;
+	margin-bottom:3em;
+}
+
+.usertable article {
+	display:flex;
+	flex-flow:row nowrap;
+	justify-content:space-between;
+	background-color:#eee;
+	border-bottom:2px solid black;
+	text-align:left;
+	font-size:1.1em;
+	padding:0.4em 0 0.4em 0;
+}
+
+.usertable article:nth-child(odd) {
+	background-color:var(--oddcol);
+}
+
+.usertable span > button {
+	font-size:1.2em;
+	margin:0;
+	padding:0;
+}
+
+.usertable article > span {
+	padding-left:1%;
+	box-sizing:border-box;
+	width:20%;
+}
+
+
+.usertable article > span:nth-last-child(1) {
+	width:5%;
+	min-width:60px;
+}
+
+.usertable article > span:nth-last-child(2) {
+	width:10%;
+}
+
+
+.usertable article:nth-last-child(1) {
+	border-bottom:0;
+}
+
+
+.usertable article:nth-child(1) {
+	background-color:var(--headcol);
+}
+
+.usertable article:nth-child(1) > span {
+	background-color:transparent;
+	font-weight:900;
+	font-size:1.3em;
+}
+
+.usertable > article.ticked {
+	background-color:rgba(255,0,0,0.6);
+}

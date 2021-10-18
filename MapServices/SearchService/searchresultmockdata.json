@@ -1,0 +1,26 @@
+{
+  "spatialReference": {
+    "wkid": 4326,
+    "latestWkid": 4326
+  },
+  "candidates": [
+    {
+      "address": "151 46",
+      "location": {
+        "x": 17.610142587000041,
+        "y": 59.186625000000049
+      },
+      "score": 100,
+      "attributes": {
+        "PlaceName": "15146",
+        "Place_addr": "151 46, Södertälje"
+      },
+      "extent": {
+        "xmin": 17.60014258700004,
+        "ymin": 59.176625000000051,
+        "xmax": 17.620142587000043,
+        "ymax": 59.196625000000047
+      }
+    }
+  ]
+}

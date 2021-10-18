@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  classlibraryapi:
+    image: ${DOCKER_REGISTRY-}classlibraryapi
+    build:
+      context: .
+      dockerfile: ClassLibraryAPI/Dockerfile

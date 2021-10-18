@@ -1,0 +1,86 @@
+﻿<Application x:Class="WpfUi.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:WpfUi"
+             xmlns:viewmodels="clr-namespace:WpfUi.ViewModels"
+             xmlns:view="clr-namespace:WpfUi.Views" 
+             xmlns:controls="clr-namespace:WpfUi.Controls"
+             xmlns:modalview="clr-namespace:WpfUi.Views.ModalViews"
+             xmlns:modalviewmodels="clr-namespace:WpfUi.ViewModels.ModalViewModels">
+    
+
+    <Application.Resources>
+
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+
+
+                <ResourceDictionary Source="/assets/icons.xaml"/>
+                <ResourceDictionary Source="Styles/Button.xaml"/>
+                <ResourceDictionary Source="Styles/Common.xaml"/>
+                <ResourceDictionary Source="Styles/MenuButton.xaml"/>
+                <ResourceDictionary Source="Styles/StylishScrollbar.xaml"/>
+                
+                
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="{x:Type Path}">
+                <Setter Property="Fill" Value="Gray"/>
+                <Setter Property="Width" Value="15"/>
+                <Setter Property="Stretch" Value="Uniform"/>
+            </Style>
+
+            
+            
+
+            <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
+                <view:HomeView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:MapViewModel}">
+                <view:MapView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:TimePlanerViewModel}">
+                <view:TimeplannerView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:SettingsViewModel}">
+                <view:SettingsView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:SupportViewModel}">
+                <view:SupportView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:LoginViewModel}">
+                <view:LoginView LoginCommand="{Binding LoginCommand}"/>
+            </DataTemplate>
+
+            <!--PANELS-->
+            
+            <DataTemplate DataType="{x:Type viewmodels:NavigationBarViewModel}">
+                <view:NavigationBarView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:RightPanelViewModel}">
+                <view:RightPanelView/>
+            </DataTemplate>
+            
+            <!--PANELS-->
+
+            <!--MODALS-->
+
+            <DataTemplate DataType="{x:Type modalviewmodels:CreateTimePlanModaViewModel}">
+                <modalview:CreateTimePlanView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type modalviewmodels:EditTimePlanViewModel}">
+                <modalview:EditTimePlanView/>
+            </DataTemplate>
+
+            <!--MODALS-->
+
+        </ResourceDictionary>
+
+    </Application.Resources>
+</Application>

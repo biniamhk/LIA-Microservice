@@ -1,0 +1,38 @@
+server:
+  port:
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  datasource:
+    password: Biniam2011
+    url: jdbc:sqlserver://localhost:1433;registration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false
+    username: biniam
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        format_sql: true
+    show-sql: true
+
+#  mail:
+#    host: localhost
+#    port: 1025
+#    username: hello
+#    password: hello
+#
+#    properties:
+#      mail:
+#        smtp:
+#          ssl:
+#            trust: "*"
+#          auth: true
+#          starttls:
+#            enable: true
+#          connectiontimeout: 5000
+#          timeout: 3000
+#          writetimeout: 5000

@@ -1,0 +1,27 @@
+Index: user-service/src/test/java/se/frontendstrategy/userservice/users/UserRepositoryTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package se.frontendstrategy.userservice.users;\r\n\r\nimport org.junit.jupiter.api.Test;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;\r\n\r\nimport java.util.Optional;\r\n\r\nimport static org.assertj.core.api.Assertions.assertThat;\r\nimport static org.assertj.core.api.Assertions.assertThatThrownBy;\r\n\r\n@DataJpaTest(\r\n        properties = {\r\n                \"spring.jpa.properties.javax.persistence.validation.mode=registration\"\r\n        }\r\n)\r\nclass UserRepositoryTest {\r\n\r\n    @Autowired\r\n    private UserRepository underTest;\r\n\r\n    @Test\r\n    void itShouldFindByEmail() {\r\n        String email = \"philip.mattsson@test.se\";\r\n        User Usr = new User(\"Philip\", \"Mattsson\", email,\r\n                \"password\",\r\n                \"street69\", \"156206545\", UserRole.ADMIN);\r\n\r\n        underTest.save(Usr);\r\n\r\n        Optional<User> userOptional = underTest.findByEmail(email);\r\n        assertThat(userOptional)\r\n                .isPresent()\r\n                .hasValueSatisfying( c -> {\r\n                    assertThat(c).isEqualTo(Usr);\r\n                });\r\n    }\r\n\r\n    @Test\r\n    void itShouldNotFindByEmail(){\r\n        String email = \"philip.mattsson@iths.se\";\r\n\r\n        Optional<User> userOptional = underTest.findByEmail(email);\r\n\r\n        assertThat(userOptional).isNotPresent();\r\n    }\r\n\r\n    @Test\r\n    void itShouldSaveUserWhenEmailIsValid(){\r\n        String email = \"philip.mattsson@iths.se\";\r\n\r\n        User Usr = new User(\"Philip\", \"Mattsson\", email, \"asdsd\", \"dffg\", \"54561\", UserRole.ADMIN);\r\n\r\n        underTest.save(Usr);\r\n        Optional<User> userOptional = underTest.findByEmail(email);\r\n        assertThat(userOptional)\r\n                .isPresent()\r\n                .hasValueSatisfying( c -> {\r\n                    assertThat(c.getFirstname()).isEqualTo(\"Philip\");\r\n                    assertThat(c.getLastname()).isEqualTo(\"Mattsson\");\r\n                    assertThat(c.getEmail()).isEqualTo(email);\r\n                    assertThat(c.getPassword()).isEqualTo(\"asdsd\");\r\n                    assertThat(c.getAddress()).isEqualTo(\"dffg\");\r\n                    assertThat(c.getPhone()).isEqualTo(\"54561\");\r\n                    assertThat(c.getUserRole()).isEqualTo(UserRole.ADMIN);\r\n                    assertThat(c).isEqualTo(Usr);\r\n                });\r\n    }\r\n\r\n    @Test\r\n    void itShouldNotSaveUserWhenEmailIsNull(){\r\n\r\n    }\r\n\r\n    @Test\r\n    void itShouldNotSaveUserWhenEmailAlreadyExist(){\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/src/test/java/se/frontendstrategy/userservice/users/UserRepositoryTest.java b/user-service/src/test/java/se/frontendstrategy/userservice/users/UserRepositoryTest.java
+--- a/user-service/src/test/java/se/frontendstrategy/userservice/users/UserRepositoryTest.java	
++++ b/user-service/src/test/java/se/frontendstrategy/userservice/users/UserRepositoryTest.java	
+@@ -14,7 +14,7 @@
+                 "spring.jpa.properties.javax.persistence.validation.mode=registration"
+         }
+ )
+-class UserRepositoryTest {
++class UserRepositoryTest {/*
+ 
+     @Autowired
+     private UserRepository underTest;
+@@ -75,5 +75,5 @@
+     @Test
+     void itShouldNotSaveUserWhenEmailAlreadyExist(){
+ 
+-    }
++    }*/
+ }
+\ No newline at end of file

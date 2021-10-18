@@ -1,0 +1,110 @@
+﻿<UserControl x:Class="WpfUi.Views.ModalViews.EditTimePlanView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfUi.Views.ModalViews" xmlns:modalviewmodels="clr-namespace:WpfUi.ViewModels.ModalViewModels" d:DataContext="{d:DesignInstance Type=modalviewmodels:EditTimePlanViewModel}"
+             mc:Ignorable="d" 
+                d:DesignHeight="800" d:DesignWidth="600">
+    <Grid Background="#E1E4E6">
+
+
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+
+
+
+
+
+            <StackPanel 
+                        VerticalAlignment="Top">
+
+                <TextBlock Text="Edit Timeplan"
+                           FontWeight="SemiBold"
+                           FontFamily="helvetica"
+                           FontSize="22"
+                           Foreground="DarkGray"
+                           HorizontalAlignment="Center"
+                           Margin="10,10,10,10"/>
+
+            </StackPanel>
+
+
+            <Grid Margin="10" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="400" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+
+                    <RowDefinition Height="200" />
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label>Name:</Label>
+                <TextBox Grid.Column="1" Margin="0,0,0,10" Text="{Binding TimePlan.Name}"/>
+
+                <Label Grid.Row="1">Created By:</Label>
+                <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" Text="{Binding TimePlan.CreatedBy}" IsEnabled="False"/>
+
+                <Label Grid.Row="2">From Date:</Label>
+                <DatePicker Grid.Row="2" Grid.Column="1" Margin="0,0,0,10" SelectedDate="{Binding TimePlan.FromDate}"/>
+
+                <Label Grid.Row="3">To Date:</Label>
+                <DatePicker Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" SelectedDate="{Binding TimePlan.ToDate}"/>
+
+
+                <Label Grid.Row="4">Description:</Label>
+                <TextBox Grid.Row="4" Grid.Column="1" AcceptsReturn="True" Text="{Binding TimePlan.Description}"/>
+
+                <Label Grid.Row="5">Members:</Label>
+
+                <ListView ItemsSource="{Binding TimePlan.Members}"
+                  
+                  Grid.Row="5">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <WrapPanel>
+
+                                <TextBlock Text="{Binding UserId}"  />
+                                <TextBlock Text="{Binding UserName}"  />
+                            </WrapPanel>
+                        </DataTemplate>
+
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </Grid>
+
+
+
+
+
+
+
+
+            <StackPanel Grid.Row="3"
+                        Orientation="Horizontal"
+                        Margin="0,50,0,0" 
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                <Button Width="100" Height="40" Content="Save" Margin="15,0,0,15" 
+                    Style="{StaticResource ButtonStyle}" Command="{Binding SaveEditedTimePlanCommand}"
+                    CommandParameter="{Binding TimePlan}"
+                    />
+
+                <Button Width="100" Height="40" Content="Close" Margin="15,0,0,15" Style="{StaticResource ButtonStyle}" Command="{Binding CloseModalCommand}"/>
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</UserControl>

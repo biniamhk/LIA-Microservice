@@ -1,0 +1,223 @@
+﻿{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/save",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "MementoService",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/memento",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/undo/{userID}/{index}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "MementoService",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/undo/{userID}/{index}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/redo/{userID}/{index}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "MementoService",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/redo/{userID}/{index}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Search?address={location}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "SearchService",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/search/{location}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/15672",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "RabbitMqManager",
+          "Port": 15672
+        }
+      ],
+      "UpstreamPathTemplate": "/RabbitMQ"
+    },
+    {
+      "DownstreamPathTemplate": "/api/settings/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "SettingsService",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/settings",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/settings/restore/{userid}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "SettingsService",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/settings/restore/{userid}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/settings/{userid}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "SettingsService",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/settings/{userid}",
+      "UpstreamHttpMethod": [ "Get", "Put" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/PlanService/{planId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "PlanService",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/planservice/{planId}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/PlanService",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "PlanService",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/planservice",
+      "UpstreamHttpMethod": [ "Delete", "Post", "Put" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/PlanService/getAllPlans",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "PlanService",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/planservice/getAllPlans/{userId}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/PlanService/membership",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "PlanService",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/planservice/membership/{userId}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+
+
+    {
+      "DownstreamPathTemplate": "/api/v1/registration",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "UserService",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/registration",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "UserService",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/login",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/confirm?token={confirm}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "UserService",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/confirm/{confirm}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/users",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "UserService",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/users",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/delete/{email}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "UserService",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/delete/{email}",
+      "UpstreamHttpMethod": [ "Delete" ]
+    }
+    //"AuthenticationOptions": {
+    //  "AuthenticationProviderKey": "Bearer",
+    //  "AllowedScopes": []
+    //},
+    //"RateLimitOptions": {
+    //  "ClientWhitelist": [],
+    //  "EnableRateLimiting": true,
+    //  "Period": "5s",
+    //  "PeriodTimespan": 1,
+    //  "Limit": 1
+    //},
+    //"FileCacheOptions": { "TtlSeconds": 30 }
+  ],
+  "GlobalConfiguration": {
+  }
+}

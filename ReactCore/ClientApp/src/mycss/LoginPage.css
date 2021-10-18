@@ -1,0 +1,60 @@
+
+.errorfield {
+	background-color:red;
+}
+
+.pagestyle {
+	display:flex;
+	flex-flow:column wrap;
+	justify-content:center;
+	align-items:center;
+	height:70vh;
+	width:100%;
+}
+
+.loginfield, .createfield {
+	display:flex;
+	flex-flow:column wrap;
+	justify-content:space-around;
+	align-items:center;
+	width:50%;
+	height:50%;
+	border:2px solid black;
+}
+
+.createfield {
+	width:90%;
+	flex-flow: row wrap;
+}
+
+input[type=text], input[type=password] {
+	width:50%;
+	font-size:2em;
+}
+
+.createfield > input[type=text], .createfield > input[type=password] {
+	width:90%;
+}
+
+
+
+
+button {
+	font-size:1.2em;
+	margin-top:1em;
+	margin-bottom:1em;
+	transition: all 0.5s;
+	min-width:2.5em;
+	padding:0.5em;
+	box-sizing:border-box;
+}
+button:hover {
+	color:red;
+	border-color:red;
+	filter:brightness(200%);
+	cursor:pointer;
+	font-weight:700;
+}
+input[type=checkbox]:hover {
+	cursor:pointer;
+}

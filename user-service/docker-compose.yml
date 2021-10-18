@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  user-service:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: user-service
+    ports:
+      - "8080:8080"
+    environment:
+      MSSQL_USER: "SA"
+      MSSQL_PASSWORD: "T8Bn73oL51Au"
+      SPRING_DATASOURCE_URL: "jdbc:sqlserver://user-database;registration?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false"
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+      SPRING_DATASOURCE_PASSWORD: "T8Bn73oL51Au"
+      SPRING_DATASOURCE_USERNAME: "SA"
+    depends_on:
+      - sql-server
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: user-database
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "T8Bn73oL51Au"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"

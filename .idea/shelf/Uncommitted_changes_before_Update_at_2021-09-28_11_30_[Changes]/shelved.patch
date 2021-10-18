@@ -1,0 +1,253 @@
+Index: user-service/src/main/java/se/frontendstrategy/userservice/registration/RegistrationController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package se.frontendstrategy.userservice.registration;\r\n\r\nimport lombok.AllArgsConstructor;\r\nimport org.springframework.web.bind.annotation.*;\r\n\r\n@RestController\r\n@RequestMapping(path=\"api/v1/\")\r\n@AllArgsConstructor\r\npublic class RegistrationController {\r\n\r\n    private RegistrationService registrationService;\r\n\r\n    @PostMapping(\"/registration\")\r\n    public String registerUser(@RequestBody RegistrationRequest request) {\r\n        return registrationService.registerUser(request);\r\n    }\r\n\r\n    @PostMapping(\"/registrationAdmin\")\r\n    public String registerAdmin(@RequestBody RegistrationRequest request) {\r\n        return registrationService.registerAdmin(request);\r\n    }\r\n\r\n    @GetMapping(path = \"confirm\")\r\n    public String confirmUser(@RequestParam(\"token\") String token) {\r\n        return registrationService.confirmToken(token);\r\n    }\r\n\r\n    @DeleteMapping(path = \"delete\")\r\n    public String deleteUser(){\r\n        return null;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/src/main/java/se/frontendstrategy/userservice/registration/RegistrationController.java b/user-service/src/main/java/se/frontendstrategy/userservice/registration/RegistrationController.java
+--- a/user-service/src/main/java/se/frontendstrategy/userservice/registration/RegistrationController.java	(revision a6bd4d5c96e696b362d361a2c6afd9057afbf7f8)
++++ b/user-service/src/main/java/se/frontendstrategy/userservice/registration/RegistrationController.java	(date 1632821001034)
+@@ -1,32 +1,45 @@
+ package se.frontendstrategy.userservice.registration;
+ 
+ import lombok.AllArgsConstructor;
++import lombok.NoArgsConstructor;
+ import org.springframework.web.bind.annotation.*;
++import se.frontendstrategy.userservice.users.User;
++
++import java.util.List;
++import java.util.Optional;
++import java.util.stream.Collectors;
+ 
+ @RestController
+-@RequestMapping(path="api/v1/")
++@RequestMapping(path="api/v1/registration")
+ @AllArgsConstructor
+ public class RegistrationController {
+ 
+     private RegistrationService registrationService;
+-
+-    @PostMapping("/registration")
+-    public String registerUser(@RequestBody RegistrationRequest request) {
+-        return registrationService.registerUser(request);
+-    }
+-
+-    @PostMapping("/registrationAdmin")
+-    public String registerAdmin(@RequestBody RegistrationRequest request) {
+-        return registrationService.registerAdmin(request);
++    @PostMapping
++    public String register(@RequestBody RegistrationRequest request) {
++        return registrationService.register(request);
+     }
+ 
+     @GetMapping(path = "confirm")
+-    public String confirmUser(@RequestParam("token") String token) {
++    public String confirm(@RequestParam("token") String token) {
+         return registrationService.confirmToken(token);
++
++    }
++    @PostMapping(path = "/login")
++    public String logInUser(@RequestBody RegistrationRequest request){
++        Optional<User> users=registrationService.getUserByEmail(request.getEmail());
++
++        if(users.get().getEmail().equals(request.getEmail()))
++        return "Login confirmed";
++        else
++        return "Login not confirmed email not found";
+     }
+ 
+-    @DeleteMapping(path = "delete")
+-    public String deleteUser(){
+-        return null;
++
++
++    @GetMapping("/users")
++    public List<User> getAllUser(){
++        return registrationService.getUsers();
++
+     }
+ }
+\ No newline at end of file
+Index: user-service/src/test/java/se/frontendstrategy/userservice/controller/ControllerTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package se.frontendstrategy.userservice.controller;\r\n\r\nimport org.junit.jupiter.api.Test;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.web.server.ResponseStatusException;\r\nimport se.frontendstrategy.userservice.registration.RegistrationController;\r\nimport se.frontendstrategy.userservice.registration.RegistrationService;\r\n\r\nimport static org.assertj.core.api.AssertionsForClassTypes.assertThat;\r\nimport static org.junit.jupiter.api.Assertions.assertThrows;\r\n\r\npublic class ControllerTest {/*\r\n@Test\r\nvoid callingOneWithValidUserEmailReturnsOnePerson() {\r\n        RegistrationController registrationController=new RegistrationController(new RegistrationServiceTest());\r\n    }\r\n\r\n    @Test\r\n    void callingOneWithInvalidIdThrowsExceptionStatus404() {\r\n        RegistrationController registrationController=new RegistrationController(new RegistrationServiceTest());\r\n        var expected = assertThrows(ResponseStatusException.class, () -> registrationController.getUser(\"email\"));\r\n        assertThat(expected.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);\r\n    }\r\n\r\n*/\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/src/test/java/se/frontendstrategy/userservice/controller/ControllerTest.java b/user-service/src/test/java/se/frontendstrategy/userservice/controller/ControllerTest.java
+--- a/user-service/src/test/java/se/frontendstrategy/userservice/controller/ControllerTest.java	(revision a6bd4d5c96e696b362d361a2c6afd9057afbf7f8)
++++ b/user-service/src/test/java/se/frontendstrategy/userservice/controller/ControllerTest.java	(date 1632821006544)
+@@ -1,26 +1,14 @@
+ package se.frontendstrategy.userservice.controller;
+ 
+-import org.junit.jupiter.api.Test;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.web.server.ResponseStatusException;
++import se.frontendstrategy.userservice.emailvalidator.EmailValidatorTest;
+ import se.frontendstrategy.userservice.registration.RegistrationController;
+ import se.frontendstrategy.userservice.registration.RegistrationService;
++import se.frontendstrategy.userservice.users.UserService;
++import se.frontendstrategy.userservice.users.UserServiceTest;
+ 
+-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+-import static org.junit.jupiter.api.Assertions.assertThrows;
++public class ControllerTest {
++    private UserServiceTest userServiceTest;
+ 
+-public class ControllerTest {/*
+-@Test
+-void callingOneWithValidUserEmailReturnsOnePerson() {
+-        RegistrationController registrationController=new RegistrationController(new RegistrationServiceTest());
+-    }
+ 
+-    @Test
+-    void callingOneWithInvalidIdThrowsExceptionStatus404() {
+-        RegistrationController registrationController=new RegistrationController(new RegistrationServiceTest());
+-        var expected = assertThrows(ResponseStatusException.class, () -> registrationController.getUser("email"));
+-        assertThat(expected.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+-    }
+ 
+-*/
+ }
+Index: user-service/src/main/java/se/frontendstrategy/userservice/users/UserRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package se.frontendstrategy.userservice.users;\r\n\r\nimport org.springframework.data.jpa.repository.JpaRepository;\r\nimport org.springframework.data.jpa.repository.Modifying;\r\nimport org.springframework.data.jpa.repository.Query;\r\nimport org.springframework.stereotype.Repository;\r\nimport org.springframework.transaction.annotation.Transactional;\r\n\r\nimport java.util.Optional;\r\n\r\n@Repository\r\n@Transactional(readOnly = true)\r\npublic interface UserRepository extends JpaRepository<User, Long> {\r\n\r\n    Optional<User> findByEmail(String email);\r\n\r\n    @Transactional\r\n    @Modifying\r\n    @Query(\"UPDATE User a \" + \"SET a.enabled = TRUE WHERE a.email = ?1\")\r\n    int enableUser(String email);\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/src/main/java/se/frontendstrategy/userservice/users/UserRepository.java b/user-service/src/main/java/se/frontendstrategy/userservice/users/UserRepository.java
+--- a/user-service/src/main/java/se/frontendstrategy/userservice/users/UserRepository.java	(revision a6bd4d5c96e696b362d361a2c6afd9057afbf7f8)
++++ b/user-service/src/main/java/se/frontendstrategy/userservice/users/UserRepository.java	(date 1632821006562)
+@@ -6,6 +6,7 @@
+ import org.springframework.stereotype.Repository;
+ import org.springframework.transaction.annotation.Transactional;
+ 
++import java.util.List;
+ import java.util.Optional;
+ 
+ @Repository
+Index: user-service/src/main/java/se/frontendstrategy/userservice/registration/EmailValidator.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package se.frontendstrategy.userservice.registration;\r\n\r\nimport org.springframework.stereotype.Service;\r\n\r\nimport java.util.function.Predicate;\r\n\r\n@Service\r\npublic class EmailValidator implements Predicate<String> {\r\n    @Override\r\n    public boolean test(String s) {\r\n        return true;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/src/main/java/se/frontendstrategy/userservice/registration/EmailValidator.java b/user-service/src/main/java/se/frontendstrategy/userservice/registration/EmailValidator.java
+--- a/user-service/src/main/java/se/frontendstrategy/userservice/registration/EmailValidator.java	(revision a6bd4d5c96e696b362d361a2c6afd9057afbf7f8)
++++ b/user-service/src/main/java/se/frontendstrategy/userservice/registration/EmailValidator.java	(date 1632820964151)
+@@ -8,6 +8,9 @@
+ public class EmailValidator implements Predicate<String> {
+     @Override
+     public boolean test(String s) {
++        if (s.endsWith("@gmail.com"))
+         return true;
++        return false;
+     }
++
+ }
+Index: user-service/src/main/java/se/frontendstrategy/userservice/registration/token/ConfirmationToken.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package se.frontendstrategy.userservice.registration.token;\r\n\r\nimport se.frontendstrategy.userservice.users.User;\r\nimport lombok.Getter;\r\nimport lombok.NoArgsConstructor;\r\nimport lombok.Setter;\r\n\r\nimport javax.persistence.*;\r\nimport java.time.LocalDateTime;\r\n\r\n@Getter\r\n@Setter\r\n@NoArgsConstructor\r\n@Entity\r\npublic class ConfirmationToken {\r\n    @SequenceGenerator(\r\n            name = \"confirmation_token_sequence\",\r\n            sequenceName = \"confirmation_token_sequence\",\r\n            allocationSize = 1\r\n    )\r\n    @Id\r\n    @GeneratedValue(\r\n            strategy = GenerationType.SEQUENCE,\r\n            generator = \"confirmation_token_sequence\"\r\n    )\r\n    private Long id;\r\n\r\n    @Column(nullable = false)\r\n    private String token;\r\n\r\n    @Column(nullable = false)\r\n    private LocalDateTime createdAt;\r\n\r\n    @Column(nullable = false)\r\n    private LocalDateTime expiresAt;\r\n\r\n    private LocalDateTime confirmedAt;\r\n\r\n    @ManyToOne\r\n    @JoinColumn(\r\n            nullable = false,\r\n            name = \"user_id\"\r\n    )\r\n    private User Usr;\r\n\r\n    public ConfirmationToken(String token,\r\n                             LocalDateTime createdAt,\r\n                             LocalDateTime expiresAt,\r\n                             User Usr) {\r\n        this.token = token;\r\n        this.createdAt = createdAt;\r\n        this.expiresAt = expiresAt;\r\n        this.Usr = Usr;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/src/main/java/se/frontendstrategy/userservice/registration/token/ConfirmationToken.java b/user-service/src/main/java/se/frontendstrategy/userservice/registration/token/ConfirmationToken.java
+--- a/user-service/src/main/java/se/frontendstrategy/userservice/registration/token/ConfirmationToken.java	(revision a6bd4d5c96e696b362d361a2c6afd9057afbf7f8)
++++ b/user-service/src/main/java/se/frontendstrategy/userservice/registration/token/ConfirmationToken.java	(date 1632820964126)
+@@ -12,6 +12,7 @@
+ @Setter
+ @NoArgsConstructor
+ @Entity
++@Table(name="confirmation_token")
+ public class ConfirmationToken {
+     @SequenceGenerator(
+             name = "confirmation_token_sequence",
+Index: user-service/src/main/resources/application.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>server:\r\n  port:\r\n  error:\r\n    include-message: always\r\n    include-binding-errors: always\r\n\r\nspring:\r\n  datasource:\r\n    password: philip\r\n    url: jdbc:sqlserver://localhost;database=registration\r\n    username: philip\r\n  jpa:\r\n    hibernate:\r\n      ddl-auto: create-drop\r\n    properties:\r\n      hibernate:\r\n        dialect: org.hibernate.dialect.SQLServerDialect\r\n        format_sql: true\r\n    show-sql: true\r\n\r\n  mail:\r\n    host: localhost\r\n    port: 1025\r\n    username: hello\r\n    password: hello\r\n\r\n    properties:\r\n      mail:\r\n        smtp:\r\n          ssl:\r\n            trust: \"*\"\r\n          auth: true\r\n          starttls:\r\n            enable: true\r\n          connectiontimeout: 5000\r\n          timeout: 3000\r\n          writetimeout: 5000
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/src/main/resources/application.yml b/user-service/src/main/resources/application.yml
+--- a/user-service/src/main/resources/application.yml	(revision a6bd4d5c96e696b362d361a2c6afd9057afbf7f8)
++++ b/user-service/src/main/resources/application.yml	(date 1632643724480)
+@@ -1,17 +1,17 @@
+ server:
+-  port:
++  port: 8080
+   error:
+     include-message: always
+     include-binding-errors: always
+ 
+ spring:
+   datasource:
+-    password: philip
+-    url: jdbc:sqlserver://localhost;database=registration
+-    username: philip
++    password: biniam
++    url: jdbc:sqlserver://localhost:1433;Databasename=registration
++    username: biniam
+   jpa:
+     hibernate:
+-      ddl-auto: create-drop
++      ddl-auto: update
+     properties:
+       hibernate:
+         dialect: org.hibernate.dialect.SQLServerDialect
+Index: user-service/src/main/java/se/frontendstrategy/userservice/security/config/WebSecurityConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package se.frontendstrategy.userservice.security.config;\r\n\r\nimport lombok.AllArgsConstructor;\r\nimport org.springframework.context.annotation.Bean;\r\nimport org.springframework.context.annotation.Configuration;\r\nimport org.springframework.security.authentication.dao.DaoAuthenticationProvider;\r\nimport org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;\r\nimport org.springframework.security.config.annotation.web.builders.HttpSecurity;\r\nimport org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;\r\nimport org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;\r\nimport org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;\r\nimport se.frontendstrategy.userservice.users.UserService;\r\n\r\n@Configuration\r\n@AllArgsConstructor\r\n@EnableWebSecurity\r\npublic class WebSecurityConfig extends WebSecurityConfigurerAdapter {\r\n\r\n    private final UserService userService;\r\n    private final BCryptPasswordEncoder bCryptPasswordEncoder;\r\n\r\n    @Override\r\n    protected void configure(HttpSecurity http) throws Exception {\r\n        http\r\n                .csrf().disable()\r\n                .authorizeRequests()\r\n                .antMatchers(\"/api/v*/**\")\r\n                .permitAll()\r\n                .anyRequest().authenticated()\r\n                .and()\r\n                .formLogin().permitAll()\r\n                .and()\r\n                .logout().permitAll()\r\n                .and()\r\n                .exceptionHandling().accessDeniedPage(\"/403\");\r\n    }\r\n\r\n    @Override\r\n    protected void configure(AuthenticationManagerBuilder auth) throws Exception {\r\n        auth.authenticationProvider(daoAuthenticationProvider());\r\n    }\r\n\r\n    @Bean\r\n    public DaoAuthenticationProvider daoAuthenticationProvider() {\r\n        DaoAuthenticationProvider provider =\r\n                new DaoAuthenticationProvider();\r\n        provider.setPasswordEncoder(bCryptPasswordEncoder);\r\n        provider.setUserDetailsService(userService);\r\n        return provider;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/src/main/java/se/frontendstrategy/userservice/security/config/WebSecurityConfig.java b/user-service/src/main/java/se/frontendstrategy/userservice/security/config/WebSecurityConfig.java
+--- a/user-service/src/main/java/se/frontendstrategy/userservice/security/config/WebSecurityConfig.java	(revision a6bd4d5c96e696b362d361a2c6afd9057afbf7f8)
++++ b/user-service/src/main/java/se/frontendstrategy/userservice/security/config/WebSecurityConfig.java	(date 1632820964111)
+@@ -1,6 +1,7 @@
+ package se.frontendstrategy.userservice.security.config;
+ 
+ import lombok.AllArgsConstructor;
++import lombok.NoArgsConstructor;
+ import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Configuration;
+ import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+Index: user-service/src/main/java/se/frontendstrategy/userservice/users/UserService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package se.frontendstrategy.userservice.users;\r\n\r\nimport lombok.AllArgsConstructor;\r\nimport org.springframework.security.core.userdetails.UserDetails;\r\nimport org.springframework.security.core.userdetails.UserDetailsService;\r\nimport org.springframework.security.core.userdetails.UsernameNotFoundException;\r\nimport org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;\r\nimport org.springframework.stereotype.Service;\r\nimport se.frontendstrategy.userservice.registration.token.ConfirmationToken;\r\nimport se.frontendstrategy.userservice.registration.token.ConfirmationTokenService;\r\n\r\nimport java.time.LocalDateTime;\r\nimport java.util.UUID;\r\n\r\n@Service\r\n@AllArgsConstructor\r\npublic class UserService implements UserDetailsService {\r\n\r\n    private final static String USER_NOT_FOUND_MSG = \"User with email %s not found\";\r\n\r\n    private final UserRepository repository;\r\n    private final BCryptPasswordEncoder bCryptPasswordEncoder;\r\n    private final ConfirmationTokenService confirmationTokenService;\r\n\r\n    @Override\r\n    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {\r\n        return repository.findByEmail(email)\r\n                .orElseThrow(()\r\n                        -> new UsernameNotFoundException(\r\n                                String.format(USER_NOT_FOUND_MSG, email)));\r\n    }\r\n\r\n    public String signUpUser(User Usr) {\r\n        boolean userExists = repository\r\n                .findByEmail(Usr.getEmail())\r\n                .isPresent();\r\n\r\n        if (userExists) {\r\n            throw new IllegalStateException(\"email already taken\");\r\n        }\r\n\r\n        String encodedPassword = bCryptPasswordEncoder\r\n                .encode(Usr.getPassword());\r\n\r\n        Usr.setPassword(encodedPassword);\r\n\r\n        repository.save(Usr);\r\n\r\n        String token = UUID.randomUUID().toString();\r\n\r\n        ConfirmationToken confirmationToken = new ConfirmationToken(\r\n                token,\r\n                LocalDateTime.now(),\r\n                LocalDateTime.now().plusHours(24),\r\n                Usr\r\n        );\r\n\r\n        confirmationTokenService.saveConfirmationToken(\r\n                confirmationToken);\r\n\r\n        return token;\r\n    }\r\n\r\n    public void enableUser(String email){\r\n        repository.enableUser(email);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/user-service/src/main/java/se/frontendstrategy/userservice/users/UserService.java b/user-service/src/main/java/se/frontendstrategy/userservice/users/UserService.java
+--- a/user-service/src/main/java/se/frontendstrategy/userservice/users/UserService.java	(revision a6bd4d5c96e696b362d361a2c6afd9057afbf7f8)
++++ b/user-service/src/main/java/se/frontendstrategy/userservice/users/UserService.java	(date 1632820964100)
+@@ -10,6 +10,8 @@
+ import se.frontendstrategy.userservice.registration.token.ConfirmationTokenService;
+ 
+ import java.time.LocalDateTime;
++import java.util.List;
++import java.util.Optional;
+ import java.util.UUID;
+ 
+ @Service
+@@ -64,4 +66,13 @@
+     public void enableUser(String email){
+         repository.enableUser(email);
+     }
++
++
++    public List<User> getAllUsers(){
++        return repository.findAll();
++    }
++
++    public Optional<User> getUserByEmail(String email){
++        return repository.findByEmail(email);
++    }
+ }

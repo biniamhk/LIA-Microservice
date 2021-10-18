@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "properties",
+      "type": "java.lang.String",
+      "description": "Description for properties."
+    },
+    {
+      "name": "stripe.enable",
+      "type": "java.lang.String",
+      "description": "Description for stripe.enable."
+    }
+  ] }

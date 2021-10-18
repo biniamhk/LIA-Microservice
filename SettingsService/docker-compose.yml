@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  mongodb_container:
+    container_name: SettingsServiceDB
+    image: mongo:latest 
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+  settingsservice:
+    image: ${DOCKER_REGISTRY-}settingsservice
+    container_name: Settings
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+
+volumes:
+  mongodb_data_container:
